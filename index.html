@@ -1,296 +1,623 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HerzbergCraft | Ultimate Wiki & Game</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --mc-green: #5aa742;
-            --mc-dirt: #866043;
-            --mc-stone: #7a7a7a;
-            --mc-blue: #3f3fec;
-            --mc-gold: #fdf55f;
-            --mc-iron: #d8d8d8;
-            --bg-sky: #4e72b8;
-            --mc-border: #373737;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Factores Higiénicos de Herzberg</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Press Start 2P', cursive; }
+    :root {
+      --p1: #7C3AED; --p2: #A855F7; --p3: #C4B5FD; --p4: #EDE9FE;
+      --b1: #1D4ED8; --b2: #3B82F6; --b3: #93C5FD; --b4: #DBEAFE;
+      --g1: #059669; --g2: #10B981; --g3: #6EE7B7; --g4: #D1FAE5;
+      --dark: #05030A; /* Fondo más oscuro para más contraste */
+      --mid: #130a24;
+    }
 
-        body {
-            background-color: var(--bg-sky);
-            background-image: url('https://www.transparenttextures.com/patterns/pixel-weave.png');
-            color: white;
-            image-rendering: pixelated;
-        }
+    html { scroll-behavior: smooth; }
 
-        /* --- UI Estilo Minecraft --- */
-        .mc-container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 20px;
-        }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--dark);
+      color: #f0eaff;
+      overflow-x: hidden;
+    }
+    
+    /* Bloquear scroll inicial */
+    body.locked { overflow: hidden; }
 
-        .mc-panel {
-            background-color: #c6c6c6;
-            border: 8px solid #000;
-            box-shadow: inset -6px -6px #555, inset 6px 6px #fff;
-            padding: 40px;
-            color: #333;
-            margin-bottom: 40px;
-            position: relative;
-        }
+    /* PANTALLA DE INICIO */
+    #welcome-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--mid) 0%, var(--dark) 100%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
 
-        .mc-title {
-            background-color: var(--mc-stone);
-            color: white;
-            padding: 15px;
-            display: inline-block;
-            margin-top: -60px;
-            margin-bottom: 25px;
-            border: 4px solid #000;
-            box-shadow: 4px 4px #000;
-            font-size: 0.9rem;
-        }
+    .welcome-title {
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--p2), var(--b2), var(--g2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glowText 3s infinite alternate;
+    }
 
-        h1 {
-            font-size: 3rem;
-            text-align: center;
-            padding: 60px 20px;
-            text-shadow: 6px 6px #000;
-            background: url('https://www.transparenttextures.com/patterns/minecraft-dirt.png');
-            border-bottom: 10px solid #222;
-            color: var(--mc-green);
-        }
+    .welcome-subtitle {
+      font-size: 18px;
+      color: rgba(240,234,255,0.7);
+      margin-bottom: 50px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
 
-        /* --- Contenido Expandido --- */
-        .topic-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+    .btn-start {
+      padding: 16px 48px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(90deg, var(--p1), var(--b1));
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(124, 58, 237, 0.6);
+      transition: all 0.3s ease;
+      animation: pulseBtn 2s infinite;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-        .data-point {
-            background: rgba(0,0,0,0.05);
-            padding: 15px;
-            border-left: 6px solid var(--mc-dirt);
-            margin-bottom: 15px;
-        }
+    .btn-start:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.9);
+      background: linear-gradient(90deg, var(--p2), var(--b2));
+    }
 
-        h3 { font-size: 0.8rem; margin-bottom: 10px; color: #000; }
-        p, li { font-size: 0.6rem; line-height: 1.8; list-style: none; }
-        b { color: var(--mc-blue); }
+    /* NAVBAR */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(5,3,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(124,58,237,0.3);
+      padding: 14px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      transform: translateY(-100%);
+      transition: transform 0.8s ease;
+    }
+    body:not(.locked) .navbar { transform: translateY(0); }
 
-        /* --- Game Engine --- */
-        #game-engine {
-            background: #111;
-            border: 10px solid var(--mc-stone);
-            padding: 30px;
-            text-align: center;
-        }
+    .nav-brand {
+      font-size: 18px; font-weight: bold;
+      background: linear-gradient(135deg, var(--p2), var(--b2), var(--g2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-dots { display: flex; gap: 10px; align-items: center; }
+    .nav-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(196,181,253,0.3);
+      cursor: pointer; transition: all 0.3s;
+      border: none; outline: none;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+    .nav-dot.active { background: var(--p2); transform: scale(1.5); box-shadow: 0 0 10px var(--p2); }
+    .nav-dot:hover { background: rgba(196,181,253,0.8); }
 
-        .hud-top {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            background: #222;
-            padding: 15px;
-            border: 4px solid var(--mc-border);
-        }
+    /* SLIDES & DYNAMIC SCROLL ANIMATIONS */
+    .slide {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 100px 48px 60px;
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .slide-wrap { position: relative; }
 
-        .xp-container { width: 100%; max-width: 400px; }
-        .xp-bar { height: 20px; background: #444; border: 3px solid #000; margin-top: 5px; }
-        .xp-fill { height: 100%; background: #3fff3f; width: 0%; transition: 0.5s; }
+    .bg-layer {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      transition: background 1.5s ease;
+    }
+    /* Efectos de luz de fondo más intensos */
+    .bg-0 { background: radial-gradient(circle at 20% 50%, rgba(124,58,237,0.25) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(29,78,216,0.15) 0%, transparent 50%); }
+    .bg-1 { background: radial-gradient(circle at 70% 30%, rgba(168,85,247,0.2) 0%, transparent 60%); }
+    .bg-2 { background: radial-gradient(circle at 30% 70%, rgba(59,130,246,0.25) 0%, transparent 55%); }
+    .bg-3 { background: radial-gradient(circle at 60% 40%, rgba(16,185,129,0.2) 0%, transparent 55%); }
+    .bg-4 { background: radial-gradient(circle at 40% 60%, rgba(124,58,237,0.2) 0%, transparent 55%), radial-gradient(circle at 80% 20%, rgba(16,185,129,0.15) 0%, transparent 50%); }
+    .bg-5 { background: radial-gradient(circle at 20% 30%, rgba(29,78,216,0.2) 0%, transparent 55%), radial-gradient(circle at 70% 70%, rgba(168,85,247,0.2) 0%, transparent 55%); }
+    .bg-6 { background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.25) 0%, transparent 60%); }
 
-        .inventory-hotbar {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-        }
+    /* ELEMENTOS REVELABLES (Animación en Cascada) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+    .slide.visible .d-1 { transition-delay: 0.1s; }
+    .slide.visible .d-2 { transition-delay: 0.25s; }
+    .slide.visible .d-3 { transition-delay: 0.4s; }
+    .slide.visible .d-4 { transition-delay: 0.55s; }
+    .slide.visible .d-5 { transition-delay: 0.7s; }
 
-        .mc-slot {
-            width: 70px;
-            height: 70px;
-            background: #8b8b8b;
-            border: 4px solid #373737;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.1s;
-        }
+    /* TYPOGRAPHY & GRADIENTS */
+    .pill {
+      display: inline-block; padding: 6px 18px;
+      border-radius: 100px; font-size: 12px; font-weight: bold;
+      margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .pill-p { background: rgba(124,58,237,0.2); color: var(--p3); border: 1px solid var(--p2); box-shadow: 0 0 10px rgba(124,58,237,0.3); }
+    .pill-b { background: rgba(29,78,216,0.2); color: var(--b3); border: 1px solid var(--b2); box-shadow: 0 0 10px rgba(29,78,216,0.3); }
+    .pill-g { background: rgba(5,150,105,0.2); color: var(--g3); border: 1px solid var(--g2); box-shadow: 0 0 10px rgba(5,150,105,0.3); }
 
-        .mc-slot:hover { border-color: #fff; background: #999; }
-        .mc-slot img { width: 40px; }
+    .slide-title {
+      font-size: clamp(36px, 6vw, 60px);
+      font-weight: 900; line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    /* Letras con degradados brillantes */
+    .grad-text-purple { background: linear-gradient(to right, #C4B5FD, #A855F7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .grad-text-blue { background: linear-gradient(to right, #93C5FD, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .grad-text-green { background: linear-gradient(to right, #6EE7B7, #10B981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .feedback-bubble {
-            min-height: 100px;
-            background: #000;
-            border: 4px solid var(--mc-iron);
-            margin-top: 20px;
-            padding: 20px;
-            color: var(--mc-gold);
-            font-size: 0.55rem;
-        }
+    .divider { width: 80px; height: 4px; border-radius: 2px; margin: 20px 0; box-shadow: 0 0 10px currentColor; }
+    .div-p { background: linear-gradient(90deg, var(--p1), var(--p2)); color: var(--p2); }
+    .div-b { background: linear-gradient(90deg, var(--b1), var(--b2)); color: var(--b2); }
+    .div-g { background: linear-gradient(90deg, var(--g1), var(--g2)); color: var(--g2); }
 
-    </style>
+    .big-num {
+      font-size: 120px; font-weight: bold; line-height: 1;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      position: absolute; right: 20px; top: 0px;
+      user-select: none; pointer-events: none;
+    }
+
+    /* CARDS & LIGHTING */
+    .card {
+      background: rgba(20, 15, 35, 0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 24px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(124,58,237,0.2);
+    }
+    .card-h { font-size: 17px; font-weight: bold; margin-bottom: 10px; }
+    .card-t { font-size: 15px; color: rgba(240,234,255,0.75); line-height: 1.6; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ICON ANIMATIONS */
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes pulseIcon { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 15px rgba(255,255,255,0.8); } 100% { transform: scale(1); opacity: 0.8; } }
+    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes pulseBtn { 0% { box-shadow: 0 0 15px rgba(124, 58, 237, 0.4); } 50% { box-shadow: 0 0 35px rgba(59, 130, 246, 0.8); } 100% { box-shadow: 0 0 15px rgba(124, 58, 237, 0.4); } }
+    @keyframes glowText { from { text-shadow: 0 0 10px rgba(168,85,247,0.2); } to { text-shadow: 0 0 20px rgba(59,130,246,0.6); } }
+
+    .anim-float { animation: float 3s ease-in-out infinite; display: inline-block; }
+    .anim-pulse { animation: pulseIcon 2s infinite; display: inline-block; }
+    .anim-spin { animation: spinSlow 8s linear infinite; display: inline-block; }
+
+    /* HERO BADGE */
+    .hero-badge {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(196,181,253,0.3);
+      border-radius: 14px; padding: 18px 24px; margin-bottom: 14px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      transition: background 0.3s;
+    }
+    .hero-badge:hover { background: rgba(124,58,237,0.2); }
+    .hero-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0; box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
+    }
+
+    /* TIMELINE */
+    .timeline-item { display: flex; gap: 20px; margin-bottom: 28px; position: relative; }
+    .timeline-dot {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: bold; flex-shrink: 0; margin-top: 2px;
+      box-shadow: 0 0 15px rgba(59,130,246,0.4);
+      transition: transform 0.3s;
+    }
+    .timeline-item:hover .timeline-dot { transform: scale(1.1); }
+    .timeline-line {
+      position: absolute; left: 22px; top: 48px;
+      width: 2px; height: calc(100% + 4px);
+      background: linear-gradient(to bottom, rgba(59,130,246,0.5), transparent);
+    }
+
+    /* FACTOR ROW */
+    .factor-row { display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+    .factor-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; box-shadow: 0 0 8px currentColor; }
+
+    /* PROGRESS BAR */
+    .progress-bar {
+      height: 8px; border-radius: 4px;
+      background: rgba(255,255,255,0.1);
+      margin-top: 8px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+    }
+    .progress-fill {
+      height: 100%; border-radius: 4px;
+      width: 0;
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+    .slide.visible .progress-fill { animation: fillBar 1.5s ease-out forwards; animation-delay: 0.8s; }
+    @keyframes fillBar { to { width: var(--target); } }
+
+    /* CASE */
+    .case-card {
+      background: rgba(30,20,40,0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 24px; margin-bottom: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+    .case-icon-row { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .case-icon-box {
+      width: 50px; height: 50px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+    }
+    .conflict-tag {
+      display: inline-block; padding: 5px 14px;
+      border-radius: 8px; font-size: 12px; font-weight: bold;
+      margin: 4px 6px 4px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* SCROLL HINT */
+    .scroll-hint {
+      text-align: center; margin-top: 40px;
+      font-size: 12px; color: rgba(240,234,255,0.5);
+      letter-spacing: 4px; text-transform: uppercase; font-weight: bold;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce { 0%,100%{ transform: translateY(0); opacity: 0.5; } 50%{ transform: translateY(10px); opacity: 1; } }
+
+    /* FOOTER */
+    .footer-bar {
+      text-align: center; padding: 60px 24px 40px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 14px; color: rgba(240,234,255,0.4);
+      margin-top: 40px;
+    }
+
+    /* MASLOW BAR */
+    .maslow-wrap { display: flex; align-items: flex-end; gap: 6px; height: 80px; margin-top: 15px; }
+    .maslow-bar {
+      flex: 1; border-radius: 6px 6px 0 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      font-weight: bold; box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+    }
+    .maslow-label { display: flex; gap: 5px; margin-top: 8px; font-weight: bold; }
+    .maslow-label div { flex: 1; text-align: center; font-size: 12px; }
+
+    /* SEPARADOR */
+    .slide-sep { border: none; border-top: 1px solid rgba(255,255,255,0.05); margin: 0 48px; }
+
+    @media (max-width: 640px) {
+      .slide { padding: 90px 20px 50px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .big-num { font-size: 80px; }
+      .navbar { padding: 12px 20px; }
+    }
+  </style>
 </head>
-<body>
+<body class="locked">
 
-    <h1>HERZBERG_CRAFT PRO</h1>
+  <!-- PANTALLA DE INICIO (NUEVA) -->
+  <div id="welcome-screen">
+    <div class="anim-float" style="font-size: 60px; margin-bottom: 20px;">💡</div>
+    <h1 class="welcome-title">Factores Higiénicos<br>de Herzberg</h1>
+    <p class="welcome-subtitle">Descubre qué motiva realmente a las personas en el trabajo</p>
+    <button class="btn-start" id="btnStart">COMENZAR</button>
+  </div>
 
-    <div class="mc-container">
-        
-        <!-- SECCIÓN 1: EL ARCHIVO -->
-        <div class="mc-panel">
-            <div class="mc-title">ENCICLOPEDIA DE GESTIÓN</div>
-            
-            <div class="topic-grid">
-                <div class="data-point">
-                    <h3>Contexto Histórico (Deep Dive)</h3>
-                    <p>En los años 50, la industria sufría de un enfoque puramente <b>Taylorista</b> (el hombre como extensión de la máquina). Herzberg, influenciado por la psicología clínica, decidió investigar por qué las personas no eran felices solo con "buenas condiciones". Analizó la crisis post-guerra y el surgimiento de la clase profesional en EE.UU.</p>
-                </div>
-                <div class="data-point">
-                    <h3>El Autor: Frederick Herzberg</h3>
-                    <p>Psicólogo y profesor de gestión. Su obra <b>"The Motivation to Work" (1959)</b> introdujo el Enriquecimiento del Trabajo. Su tesis: "Si quieres que la gente haga un buen trabajo, dales un buen trabajo para hacer".</p>
-                </div>
-            </div>
+  <nav class="navbar">
+    <span class="nav-brand">Herzberg · Motivación</span>
+    <div class="nav-dots" id="navDots"></div>
+  </nav>
 
-            <div class="data-point" style="margin-top: 20px;">
-                <h3>Principios Fundamentales (La Dualidad)</h3>
-                <p>1. <b>Factores de Higiene:</b> Son cíclicos. El hambre se quita al comer, pero vuelve. El sueldo satisface al cobrar, pero la necesidad regresa. Nunca generan motivación, solo <b>paz temporal</b>.</p>
-                <p>2. <b>Factores Motivadores:</b> Son acumulativos. El conocimiento y el logro se quedan contigo. Son los únicos que mueven la "aguja" de la productividad real.</p>
-            </div>
+  <div class="bg-layer bg-0" id="bgLayer"></div>
+
+  <main>
+    <!-- SLIDE 01: HERO -->
+    <div class="slide-wrap">
+      <div class="slide" data-slide="0" id="slide-0">
+        <span class="big-num reveal d-1">01</span>
+        <div class="pill pill-p reveal d-1">Teoría Bifactorial</div>
+        <h1 class="slide-title reveal d-2">
+          Factores<br>
+          <span class="grad-text-purple">Higiénicos</span><br>
+          de Herzberg
+        </h1>
+        <div class="divider div-p reveal d-2"></div>
+        <p class="reveal d-3" style="font-size:16px;line-height:1.75;color:rgba(240,234,255,0.8);max-width:540px;margin-bottom:30px;">
+          Una de las teorías de motivación laboral más influyentes del siglo XX.
+          Herzberg descubrió que los factores que generan satisfacción son distintos
+          a los que generan insatisfacción — y que mejorar los segundos no garantiza motivar a las personas.
+        </p>
+        <div class="hero-badge reveal d-4">
+          <div class="hero-icon anim-pulse" style="background:rgba(124,58,237,0.4);">🧠</div>
+          <div>
+            <div style="font-size:16px;font-weight:bold;margin-bottom:4px;">Frederick Herzberg</div>
+            <div style="font-size:13px;color:rgba(240,234,255,0.6);">Psicólogo industrial · Pittsburgh, 1959</div>
+          </div>
         </div>
-
-        <!-- SECCIÓN 2: NECESIDADES -->
-        <div class="mc-panel" style="background: #e1e1e1;">
-            <div class="mc-title" style="background: var(--mc-gold); color: #000;">MAPA DE NECESIDADES</div>
-            <p>Herzberg divide las necesidades humanas en dos reinos:</p>
-            <ul style="margin-top: 20px;">
-                <li>⛏️ <b>REINO ANIMAL (Evitación del Dolor):</b> Cubierto por la higiene. Si el bioma es hostil (sueldo bajo, jefes tóxicos), el jugador muere.</li>
-                <li>💎 <b>REINO HUMANO (Auto-realización):</b> Cubierto por la motivación. El deseo de construir algo épico y ser reconocido por ello.</li>
-            </ul>
+        <div class="hero-badge reveal d-5" style="background:rgba(29,78,216,0.15);border-color:rgba(147,197,253,0.3);">
+          <div class="hero-icon anim-float" style="background:rgba(29,78,216,0.4);">📘</div>
+          <div>
+            <div style="font-size:16px;font-weight:bold;margin-bottom:4px;">Teoría de los Dos Factores</div>
+            <div style="font-size:13px;color:rgba(240,234,255,0.6);">Motivadores intrínsecos vs. Higiénicos extrínsecos</div>
+          </div>
         </div>
-
-        <!-- SECCIÓN 3: CASO PRÁCTICO -->
-        <div class="mc-panel" style="background: #333; color: #fff;">
-            <div class="mc-title" style="background: var(--mc-blue);">SERVER LOG: CASO "BIT-CORP"</div>
-            <p><b>Tipo de Organización:</b> Empresa de Ciberseguridad (Bit-Corp).</p>
-            <p><b>Situación:</b> Bit-Corp paga el doble que la competencia. Tienen buffet libre y sillas de 1000 USD.</p>
-            <p><b>Conducta:</b> Los hackers están aburridos. Solo juegan solitario. No reportan vulnerabilidades. La rotación es altísima.</p>
-            <p><b>Conflicto Detectado:</b> "La Jaula de Oro". Los factores de higiene están al 100%, pero el trabajo es monótono, no hay libertad de decisión y el jefe no sabe sus nombres. <b>Faltan Motivadores.</b></p>
-        </div>
-
-        <!-- SECCIÓN 4: EL JUEGO EXPANDIDO -->
-        <div class="mc-title" style="background: var(--mc-green);">PLAY: HERZBERG SURVIVAL</div>
-        <div id="game-engine">
-            <div class="hud-top">
-                <div style="color: #ff5555;">SALUD (HIGIENE): <span id="health-val">50%</span></div>
-                <div class="xp-container">
-                    <div style="color: #55ff55;">MOTIVACIÓN (XP): <span id="xp-val">0%</span></div>
-                    <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
-                </div>
-            </div>
-
-            <h2 id="scenario-box" style="font-size: 0.7rem; color: #fff; margin: 20px 0;">Escenario: Los empleados se sienten como números en una hoja de Excel.</h2>
-
-            <div class="inventory-hotbar">
-                <div class="mc-slot" onclick="playTurn('higiene')">
-                    <img src="https://img.icons8.com/color/48/000000/bread.png" title="Comida (Sueldo)">
-                </div>
-                <div class="mc-slot" onclick="playTurn('higiene')">
-                    <img src="https://img.icons8.com/color/48/000000/shield.png" title="Escudo (Seguridad)">
-                </div>
-                <div class="mc-slot" onclick="playTurn('motivacion')">
-                    <img src="https://img.icons8.com/color/48/000000/trophy.png" title="Trofeo (Reconocimiento)">
-                </div>
-                <div class="mc-slot" onclick="playTurn('motivacion')">
-                    <img src="https://img.icons8.com/color/48/000000/map.png" title="Mapa (Crecimiento)">
-                </div>
-            </div>
-
-            <div class="feedback-bubble" id="game-feedback">
-                CONSEJO DEL ALDEANO: No puedes poner un trofeo en una casa que se está quemando. Asegura la Salud primero.
-            </div>
-        </div>
-
+        <div class="scroll-hint reveal d-5">↓ desplázate para explorar</div>
+      </div>
     </div>
+    <hr class="slide-sep" />
 
-    <script>
-        let health = 50;
-        let xp = 0;
-        let step = 0;
+    <!-- SLIDE 02: CONTEXTO HISTÓRICO -->
+    <div class="slide-wrap">
+      <div class="slide" data-slide="1" id="slide-1">
+        <span class="big-num reveal d-1">02</span>
+        <div class="pill pill-b reveal d-1">Sección 1</div>
+        <h2 class="slide-title reveal d-2">Contexto<br><span class="grad-text-blue">Histórico</span></h2>
+        <div class="divider div-b reveal d-2"></div>
 
-        const levels = [
-            {
-                q: "Escenario: La oficina tiene goteras y las sillas están rotas.",
-                h_res: "¡Pusiste bloques de mantenimiento! La salud sube. El equipo ya no se queja del dolor de espalda.",
-                m_res: "No sirve de nada dar un premio si el empleado está mojado por la gotera. -10 XP",
-                type: "h"
-            },
-            {
-                q: "Escenario: El equipo hace tareas repetitivas y se siente estancado.",
-                h_res: "Diste un bono de dinero. Compraron cosas, pero siguen aburridos en el trabajo.",
-                m_res: "¡Diamante! Creaste un plan de carrera. El equipo siente que sube de nivel.",
-                type: "m"
-            },
-            {
-                q: "Escenario: Hay miedo constante a que el servidor cierre (despidos).",
-                h_res: "¡Escudo activado! Firmaste contratos indefinidos. La salud sube al máximo.",
-                m_res: "El reconocimiento no quita el miedo a perder el empleo. Salud -10",
-                type: "h"
-            },
-            {
-                q: "Escenario: Un desarrollador resolvió un bug crítico él solo.",
-                h_res: "Le pagaste la cena. Un gesto amable, pero mañana querrá otra cena.",
-                m_res: "¡MVP! Reconociste su logro en el chat global. Su compromiso es total.",
-                type: "m"
-            }
-        ];
+        <div class="timeline-item reveal d-3">
+          <div style="position:relative;">
+            <div class="timeline-dot" style="background:rgba(59,130,246,0.2);color:var(--b3);border:2px solid var(--b2);">40s</div>
+            <div class="timeline-line"></div>
+          </div>
+          <div>
+            <div class="card-h" style="color:var(--b3);">Post Segunda Guerra Mundial <span class="anim-spin" style="font-size: 14px;">⚙️</span></div>
+            <div class="card-t">Las empresas occidentales crecen explosivamente. El management científico (Taylor) domina: se mide productividad por encima del bienestar. Los trabajadores son concebidos como "piezas de máquina". El modelo de palo y zanahoria es la norma.</div>
+          </div>
+        </div>
 
-        function playTurn(choice) {
-            const fb = document.getElementById('game-feedback');
-            const current = levels[step];
+        <div class="timeline-item reveal d-4">
+          <div style="position:relative;">
+            <div class="timeline-dot" style="background:rgba(59,130,246,0.2);color:var(--b3);border:2px solid var(--b2);">59</div>
+            <div class="timeline-line"></div>
+          </div>
+          <div>
+            <div class="card-h" style="color:var(--b3);">Herzberg publica su teoría <span class="anim-pulse" style="font-size: 14px;">📈</span></div>
+            <div class="card-t">En Pittsburgh, entrevista a 203 ingenieros y contadores. Pregunta crítica: <em>"¿Cuándo se sintió excepcionalmente bien o mal en su trabajo?"</em> Sus hallazgos, estadísticamente robustos, revelan que satisfacción e insatisfacción son dimensiones independientes.</div>
+          </div>
+        </div>
 
-            if (choice === 'higiene') {
-                health = Math.min(health + 25, 100);
-                fb.innerText = current.h_res;
-            } else {
-                if (health < 60) {
-                    xp = Math.max(xp - 10, 0);
-                    fb.innerText = "CRITICAL ERROR: " + current.m_res;
-                    fb.style.color = "#ff5555";
-                } else {
-                    xp = Math.min(xp + 35, 100);
-                    fb.innerText = "LEVEL UP: " + current.m_res;
-                    fb.style.color = "var(--mc-gold)";
-                }
-            }
+        <div class="timeline-item reveal d-5">
+          <div style="position:relative;">
+            <div class="timeline-dot" style="background:rgba(59,130,246,0.2);color:var(--b3);border:2px solid var(--b2);">68</div>
+            <div class="timeline-line"></div>
+          </div>
+          <div>
+            <div class="card-h" style="color:var(--b3);">Harvard Business Review · Explosión global</div>
+            <div class="card-t">Su artículo <em>"One More Time: How Do You Motivate Employees?"</em> (1968) se convierte en el más reimpreso en la historia del HBR. Más de un millón de copias distribuidas.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="slide-sep" />
 
-            updateUI();
-            step++;
+    <!-- SLIDE 03: AUTOR Y APORTACIONES -->
+    <div class="slide-wrap">
+      <div class="slide" data-slide="2" id="slide-2">
+        <span class="big-num reveal d-1">03</span>
+        <div class="pill pill-p reveal d-1">Sección 2</div>
+        <h2 class="slide-title reveal d-2"><span class="grad-text-purple">Autor</span> y<br>Aportaciones</h2>
+        <div class="divider div-p reveal d-2"></div>
 
-            if (step < levels.length) {
-                setTimeout(() => {
-                    document.getElementById('scenario-box').innerText = "Escenario: " + levels[step].q;
-                    fb.style.color = "var(--mc-gold)";
-                }, 3000);
-            } else {
-                setTimeout(() => {
-                    document.getElementById('game-engine').innerHTML = "<h1 style='font-size:1.5rem'>GAME OVER</h1><p style='color:white; font-size:0.7rem'>Puntuación Final: " + (health + xp) + " puntos de Gestión</p><button onclick='location.reload()' style='padding:10px; margin-top:20px'>REGENERAR MUNDO</button>";
-                }, 3000);
-            }
+        <div class="card reveal d-3" style="border-left:4px solid var(--p2);margin-bottom:20px;">
+          <div style="display:flex;align-items:center;gap:18px;margin-bottom:16px;">
+            <div class="anim-float" style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--p1),var(--b1));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;flex-shrink:0;box-shadow:0 0 15px var(--p2);">FH</div>
+            <div>
+              <div style="font-size:19px;font-weight:bold;">Frederick Irving Herzberg</div>
+              <div style="font-size:13px;color:rgba(240,234,255,0.6);">Lynn, Massachusetts · 1923 – 2000</div>
+            </div>
+          </div>
+          <div class="card-t">Psicólogo clínico e industrial. Pionero en la psicología organizacional y el concepto de <em>enriquecimiento del trabajo</em> (job enrichment). Fundó el departamento de Psicología Industrial de Case Western Reserve.</div>
+        </div>
+
+        <div class="grid-2 reveal d-4">
+          <div class="card" style="border-top:3px solid var(--p2);">
+            <div class="anim-float" style="font-size:30px;margin-bottom:12px;">📚</div>
+            <div class="card-h">Obra principal</div>
+            <div class="card-t" style="font-size:14px;"><em>The Motivation to Work</em> (1959). Fundamento empírico de la teoría bifactorial, basado en entrevistas de incidente crítico.</div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--b2);">
+            <div class="anim-spin" style="font-size:30px;margin-bottom:12px;">⚙️</div>
+            <div class="card-h">Job Enrichment</div>
+            <div class="card-t" style="font-size:14px;">Propuso rediseñar los puestos para que fueran más autónomos, significativos y desafiantes, rompiendo con el taylorismo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="slide-sep" />
+
+    <!-- SLIDE 04: CONCEPTOS CLAVE -->
+    <div class="slide-wrap">
+      <div class="slide" data-slide="3" id="slide-3">
+        <span class="big-num reveal d-1">04</span>
+        <div class="pill pill-g reveal d-1">Sección 3</div>
+        <h2 class="slide-title reveal d-2">Conceptos<br><span class="grad-text-green">Clave</span></h2>
+        <div class="divider div-g reveal d-2"></div>
+
+        <div class="card reveal d-3" style="border-left:4px solid var(--g2);margin-bottom:20px;">
+          <div class="card-h" style="color:var(--g3);font-size:18px;margin-bottom:14px;"><span class="anim-pulse">🧹</span> Factores Higiénicos (Entorno)</div>
+          <div class="card-t" style="margin-bottom:16px;">Condiciones del <strong>contexto laboral</strong>. Su presencia no motiva, pero su ausencia produce <strong>fuerte insatisfacción</strong>.</div>
+          <div class="factor-row"><div class="factor-dot" style="background:var(--g2);color:var(--g2);"></div><div class="card-t">Salario, bonos y remuneración</div></div>
+          <div class="factor-row"><div class="factor-dot" style="background:var(--g2);color:var(--g2);"></div><div class="card-t">Condiciones físicas, temperatura, ergonomía</div></div>
+          <div class="factor-row"><div class="factor-dot" style="background:var(--g2);color:var(--g2);"></div><div class="card-t">Políticas de la empresa y relación con el jefe</div></div>
+        </div>
+
+        <div class="card reveal d-4" style="border-left:4px solid var(--p2);">
+          <div class="card-h" style="color:var(--p3);font-size:18px;margin-bottom:14px;"><span class="anim-float">⭐</span> Factores Motivadores (Contenido)</div>
+          <div class="card-t" style="margin-bottom:16px;">Intrínsecos al trabajo. Su presencia <strong>genera motivación duradera</strong> desde adentro.</div>
+          <div class="factor-row"><div class="factor-dot" style="background:var(--p2);color:var(--p2);"></div><div class="card-t">Logro personal y sentido de éxito</div></div>
+          <div class="factor-row"><div class="factor-dot" style="background:var(--p2);color:var(--p2);"></div><div class="card-t">Reconocimiento específico por el trabajo</div></div>
+          <div class="factor-row"><div class="factor-dot" style="background:var(--p2);color:var(--p2);"></div><div class="card-t">Responsabilidad y desarrollo profesional</div></div>
+        </div>
+      </div>
+    </div>
+    <hr class="slide-sep" />
+
+    <!-- SLIDE 05: PRINCIPIOS FUNDAMENTALES -->
+    <div class="slide-wrap">
+      <div class="slide" data-slide="4" id="slide-4">
+        <span class="big-num reveal d-1">05</span>
+        <div class="pill pill-b reveal d-1">Sección 4</div>
+        <h2 class="slide-title reveal d-2">Principios<br><span class="grad-text-blue">Fundamentales</span></h2>
+        <div class="divider div-b reveal d-2"></div>
+
+        <div class="grid-2 reveal d-3" style="margin-bottom:16px;">
+          <div class="card" style="background:rgba(29,78,216,0.15);border-color:rgba(59,130,246,0.3);">
+            <div class="anim-pulse" style="font-size:32px;margin-bottom:12px;">⚡</div>
+            <div class="card-h" style="color:var(--b3);">Principio de Dualidad</div>
+            <div class="card-t" style="font-size:14px;">Satisfacción e insatisfacción <em>no son extremos opuestos</em>. Eliminar la insatisfacción (mejorar el sueldo) no equivale a crear motivación.</div>
+          </div>
+          <div class="card" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);">
+            <div class="anim-spin" style="font-size:32px;margin-bottom:12px;">🔄</div>
+            <div class="card-h" style="color:var(--g3);">Contexto vs. Contenido</div>
+            <div class="card-t" style="font-size:14px;">El contexto (higiene) rodea al trabajo; el contenido (motivadores) es la esencia de lo que haces cada día.</div>
+          </div>
+        </div>
+
+        <div class="card reveal d-4" style="margin-bottom:16px;">
+          <div class="card-h" style="color:var(--p3);">📊 Escala del Bienestar (Animada)</div>
+          <div style="margin-top:16px;">
+            <div style="margin-bottom:16px;">
+              <div style="font-size:13px;color:rgba(240,234,255,0.7);margin-bottom:6px;">Factor Higiénico <strong>ausente</strong> → Insatisfacción</div>
+              <div class="progress-bar"><div class="progress-fill" style="--target:28%;background:linear-gradient(90deg,#ef4444,#f97316);"></div></div>
+            </div>
+            <div style="margin-bottom:16px;">
+              <div style="font-size:13px;color:rgba(240,234,255,0.7);margin-bottom:6px;">Factor Higiénico <strong>presente</strong> → Estado Neutral</div>
+              <div class="progress-bar"><div class="progress-fill" style="--target:52%;background:linear-gradient(90deg,var(--b1),var(--b3));"></div></div>
+            </div>
+            <div>
+              <div style="font-size:13px;color:rgba(240,234,255,0.7);margin-bottom:6px;">Factor Motivador <strong>presente</strong> → Alta Motivación</div>
+              <div class="progress-bar"><div class="progress-fill" style="--target:93%;background:linear-gradient(90deg,var(--p1),var(--g2));"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="slide-sep" />
+
+    <!-- SLIDE 06: CASO PRÁCTICO -->
+    <div class="slide-wrap">
+      <div class="slide" data-slide="5" id="slide-5">
+        <span class="big-num reveal d-1">06</span>
+        <div class="pill pill-g reveal d-1">Caso Práctico</div>
+        <h2 class="slide-title reveal d-2">Hospital<br><span class="grad-text-green">Vida Nueva</span></h2>
+        <div class="divider div-g reveal d-2"></div>
+
+        <div class="case-card reveal d-3" style="border-left:4px solid #ef4444;">
+          <div class="case-icon-row">
+            <div class="case-icon-box anim-pulse" style="background:rgba(239,68,68,0.25);box-shadow:0 0 15px rgba(239,68,68,0.5);">⚠️</div>
+            <div>
+              <div style="font-size:17px;font-weight:bold;color:#fca5a5;">Situación Problemática</div>
+            </div>
+          </div>
+          <div class="card-t" style="font-size:14px;">El absentismo de enfermería aumentó un <strong>40%</strong>. Auditorías revelan satisfacción menor al 30%. La dirección dio un aumento salarial del 12%, pero la situación no mejoró.</div>
+        </div>
+
+        <div class="case-card reveal d-4" style="border-left:4px solid var(--p2);">
+          <div class="case-icon-row">
+            <div class="case-icon-box anim-float" style="background:rgba(124,58,237,0.25);box-shadow:0 0 15px var(--p2);">🔍</div>
+            <div>
+              <div style="font-size:17px;font-weight:bold;color:var(--p3);">Análisis Herzberg y Solución</div>
+            </div>
+          </div>
+          <div class="card-t" style="font-size:14px;margin-bottom:14px;">El aumento salarial solo neutralizó temporalmente el factor económico (higiene), pero no curó las causas de insatisfacción del entorno:</div>
+          <div class="factor-row"><div class="factor-dot" style="background:#ef4444;color:#ef4444;"></div><div class="card-t" style="font-size:14px;"><strong>Supervisión agresiva</strong> y condiciones físicas deterioradas.</div></div>
+          <div class="factor-row"><div class="factor-dot" style="background:#ef4444;color:#ef4444;"></div><div class="card-t" style="font-size:14px;"><strong>Políticas injustas</strong> en la asignación de turnos.</div></div>
+          
+          <div style="margin-top:20px;padding:18px;background:linear-gradient(135deg, rgba(124,58,237,0.15), rgba(59,130,246,0.15));border-radius:12px;border:1px solid rgba(196,181,253,0.3);">
+            <div style="font-size:15px;font-weight:bold;color:var(--p3);margin-bottom:8px;">🧠 Conclusión</div>
+            <div class="card-t" style="font-size:14px;">Primero se deben corregir urgentemente los <strong>factores higiénicos</strong> críticos (ambiente, trato, políticas). Solo después de llevar el clima a la "neutralidad", se pueden activar <strong>motivadores reales</strong> (reconocimiento, autonomía clínica, capacitación) para lograr compromiso.</div>
+          </div>
+        </div>
+
+        <div class="footer-bar reveal d-5">
+          <div style="margin-bottom:10px;font-size:16px;font-weight:bold;color:rgba(240,234,255,0.7);text-transform:uppercase;letter-spacing:2px;">Teoría Bifactorial de Herzberg</div>
+          <div class="anim-float">Diseñado con dinamismo y estilo</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Pantalla de inicio
+    const btnStart = document.getElementById('btnStart');
+    const welcomeScreen = document.getElementById('welcome-screen');
+    
+    btnStart.addEventListener('click', () => {
+      welcomeScreen.style.opacity = '0';
+      setTimeout(() => {
+        welcomeScreen.style.visibility = 'hidden';
+        document.body.classList.remove('locked');
+        // Trigger de la primera animación justo al empezar
+        slides[0].classList.add('visible');
+      }, 800);
+    });
+
+    // Lógica de Presentación
+    const slides = document.querySelectorAll('.slide');
+    const navDotsContainer = document.getElementById('navDots');
+    const bgLayer = document.getElementById('bgLayer');
+    const bgClasses = ['bg-0','bg-1','bg-2','bg-3','bg-4','bg-5'];
+    let currentSlide = 0;
+
+    // Crear Dots de navegación
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => {
+        slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      navDotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.nav-dot');
+
+    function setActive(idx) {
+      if (idx === currentSlide) return;
+      currentSlide = idx;
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      bgLayer.className = 'bg-layer ' + bgClasses[idx];
+    }
+
+    // Observador para activar animaciones al scrollear
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          const idx = parseInt(entry.target.dataset.slide);
+          setActive(idx);
         }
+      });
+    }, { threshold: 0.25 }); // 25% visible para disparar la animación
 
-        function updateUI() {
-            document.getElementById('health-val').innerText = health + "%";
-            document.getElementById('xp-val').innerText = xp + "%";
-            document.getElementById('xp-fill').style.width = xp + "%";
-        }
-    </script>
+    slides.forEach(s => observer.observe(s));
+  </script>
 </body>
 </html>
