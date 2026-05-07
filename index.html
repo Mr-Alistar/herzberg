@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HerzbergCraft | Ultimate Wiki & Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mc-green: #5aa742;
+            --mc-dirt: #866043;
+            --mc-stone: #7a7a7a;
+            --mc-blue: #3f3fec;
+            --mc-gold: #fdf55f;
+            --mc-iron: #d8d8d8;
+            --bg-sky: #4e72b8;
+            --mc-border: #373737;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Press Start 2P', cursive; }
+
+        body {
+            background-color: var(--bg-sky);
+            background-image: url('https://www.transparenttextures.com/patterns/pixel-weave.png');
+            color: white;
+            image-rendering: pixelated;
+        }
+
+        /* --- UI Estilo Minecraft --- */
+        .mc-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .mc-panel {
+            background-color: #c6c6c6;
+            border: 8px solid #000;
+            box-shadow: inset -6px -6px #555, inset 6px 6px #fff;
+            padding: 40px;
+            color: #333;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .mc-title {
+            background-color: var(--mc-stone);
+            color: white;
+            padding: 15px;
+            display: inline-block;
+            margin-top: -60px;
+            margin-bottom: 25px;
+            border: 4px solid #000;
+            box-shadow: 4px 4px #000;
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            padding: 60px 20px;
+            text-shadow: 6px 6px #000;
+            background: url('https://www.transparenttextures.com/patterns/minecraft-dirt.png');
+            border-bottom: 10px solid #222;
+            color: var(--mc-green);
+        }
+
+        /* --- Contenido Expandido --- */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .data-point {
+            background: rgba(0,0,0,0.05);
+            padding: 15px;
+            border-left: 6px solid var(--mc-dirt);
+            margin-bottom: 15px;
+        }
+
+        h3 { font-size: 0.8rem; margin-bottom: 10px; color: #000; }
+        p, li { font-size: 0.6rem; line-height: 1.8; list-style: none; }
+        b { color: var(--mc-blue); }
+
+        /* --- Game Engine --- */
+        #game-engine {
+            background: #111;
+            border: 10px solid var(--mc-stone);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .hud-top {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #222;
+            padding: 15px;
+            border: 4px solid var(--mc-border);
+        }
+
+        .xp-container { width: 100%; max-width: 400px; }
+        .xp-bar { height: 20px; background: #444; border: 3px solid #000; margin-top: 5px; }
+        .xp-fill { height: 100%; background: #3fff3f; width: 0%; transition: 0.5s; }
+
+        .inventory-hotbar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .mc-slot {
+            width: 70px;
+            height: 70px;
+            background: #8b8b8b;
+            border: 4px solid #373737;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .mc-slot:hover { border-color: #fff; background: #999; }
+        .mc-slot img { width: 40px; }
+
+        .feedback-bubble {
+            min-height: 100px;
+            background: #000;
+            border: 4px solid var(--mc-iron);
+            margin-top: 20px;
+            padding: 20px;
+            color: var(--mc-gold);
+            font-size: 0.55rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>HERZBERG_CRAFT PRO</h1>
+
+    <div class="mc-container">
+        
+        <!-- SECCIÓN 1: EL ARCHIVO -->
+        <div class="mc-panel">
+            <div class="mc-title">ENCICLOPEDIA DE GESTIÓN</div>
+            
+            <div class="topic-grid">
+                <div class="data-point">
+                    <h3>Contexto Histórico (Deep Dive)</h3>
+                    <p>En los años 50, la industria sufría de un enfoque puramente <b>Taylorista</b> (el hombre como extensión de la máquina). Herzberg, influenciado por la psicología clínica, decidió investigar por qué las personas no eran felices solo con "buenas condiciones". Analizó la crisis post-guerra y el surgimiento de la clase profesional en EE.UU.</p>
+                </div>
+                <div class="data-point">
+                    <h3>El Autor: Frederick Herzberg</h3>
+                    <p>Psicólogo y profesor de gestión. Su obra <b>"The Motivation to Work" (1959)</b> introdujo el Enriquecimiento del Trabajo. Su tesis: "Si quieres que la gente haga un buen trabajo, dales un buen trabajo para hacer".</p>
+                </div>
+            </div>
+
+            <div class="data-point" style="margin-top: 20px;">
+                <h3>Principios Fundamentales (La Dualidad)</h3>
+                <p>1. <b>Factores de Higiene:</b> Son cíclicos. El hambre se quita al comer, pero vuelve. El sueldo satisface al cobrar, pero la necesidad regresa. Nunca generan motivación, solo <b>paz temporal</b>.</p>
+                <p>2. <b>Factores Motivadores:</b> Son acumulativos. El conocimiento y el logro se quedan contigo. Son los únicos que mueven la "aguja" de la productividad real.</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: NECESIDADES -->
+        <div class="mc-panel" style="background: #e1e1e1;">
+            <div class="mc-title" style="background: var(--mc-gold); color: #000;">MAPA DE NECESIDADES</div>
+            <p>Herzberg divide las necesidades humanas en dos reinos:</p>
+            <ul style="margin-top: 20px;">
+                <li>⛏️ <b>REINO ANIMAL (Evitación del Dolor):</b> Cubierto por la higiene. Si el bioma es hostil (sueldo bajo, jefes tóxicos), el jugador muere.</li>
+                <li>💎 <b>REINO HUMANO (Auto-realización):</b> Cubierto por la motivación. El deseo de construir algo épico y ser reconocido por ello.</li>
+            </ul>
+        </div>
+
+        <!-- SECCIÓN 3: CASO PRÁCTICO -->
+        <div class="mc-panel" style="background: #333; color: #fff;">
+            <div class="mc-title" style="background: var(--mc-blue);">SERVER LOG: CASO "BIT-CORP"</div>
+            <p><b>Tipo de Organización:</b> Empresa de Ciberseguridad (Bit-Corp).</p>
+            <p><b>Situación:</b> Bit-Corp paga el doble que la competencia. Tienen buffet libre y sillas de 1000 USD.</p>
+            <p><b>Conducta:</b> Los hackers están aburridos. Solo juegan solitario. No reportan vulnerabilidades. La rotación es altísima.</p>
+            <p><b>Conflicto Detectado:</b> "La Jaula de Oro". Los factores de higiene están al 100%, pero el trabajo es monótono, no hay libertad de decisión y el jefe no sabe sus nombres. <b>Faltan Motivadores.</b></p>
+        </div>
+
+        <!-- SECCIÓN 4: EL JUEGO EXPANDIDO -->
+        <div class="mc-title" style="background: var(--mc-green);">PLAY: HERZBERG SURVIVAL</div>
+        <div id="game-engine">
+            <div class="hud-top">
+                <div style="color: #ff5555;">SALUD (HIGIENE): <span id="health-val">50%</span></div>
+                <div class="xp-container">
+                    <div style="color: #55ff55;">MOTIVACIÓN (XP): <span id="xp-val">0%</span></div>
+                    <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
+                </div>
+            </div>
+
+            <h2 id="scenario-box" style="font-size: 0.7rem; color: #fff; margin: 20px 0;">Escenario: Los empleados se sienten como números en una hoja de Excel.</h2>
+
+            <div class="inventory-hotbar">
+                <div class="mc-slot" onclick="playTurn('higiene')">
+                    <img src="https://img.icons8.com/color/48/000000/bread.png" title="Comida (Sueldo)">
+                </div>
+                <div class="mc-slot" onclick="playTurn('higiene')">
+                    <img src="https://img.icons8.com/color/48/000000/shield.png" title="Escudo (Seguridad)">
+                </div>
+                <div class="mc-slot" onclick="playTurn('motivacion')">
+                    <img src="https://img.icons8.com/color/48/000000/trophy.png" title="Trofeo (Reconocimiento)">
+                </div>
+                <div class="mc-slot" onclick="playTurn('motivacion')">
+                    <img src="https://img.icons8.com/color/48/000000/map.png" title="Mapa (Crecimiento)">
+                </div>
+            </div>
+
+            <div class="feedback-bubble" id="game-feedback">
+                CONSEJO DEL ALDEANO: No puedes poner un trofeo en una casa que se está quemando. Asegura la Salud primero.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let health = 50;
+        let xp = 0;
+        let step = 0;
+
+        const levels = [
+            {
+                q: "Escenario: La oficina tiene goteras y las sillas están rotas.",
+                h_res: "¡Pusiste bloques de mantenimiento! La salud sube. El equipo ya no se queja del dolor de espalda.",
+                m_res: "No sirve de nada dar un premio si el empleado está mojado por la gotera. -10 XP",
+                type: "h"
+            },
+            {
+                q: "Escenario: El equipo hace tareas repetitivas y se siente estancado.",
+                h_res: "Diste un bono de dinero. Compraron cosas, pero siguen aburridos en el trabajo.",
+                m_res: "¡Diamante! Creaste un plan de carrera. El equipo siente que sube de nivel.",
+                type: "m"
+            },
+            {
+                q: "Escenario: Hay miedo constante a que el servidor cierre (despidos).",
+                h_res: "¡Escudo activado! Firmaste contratos indefinidos. La salud sube al máximo.",
+                m_res: "El reconocimiento no quita el miedo a perder el empleo. Salud -10",
+                type: "h"
+            },
+            {
+                q: "Escenario: Un desarrollador resolvió un bug crítico él solo.",
+                h_res: "Le pagaste la cena. Un gesto amable, pero mañana querrá otra cena.",
+                m_res: "¡MVP! Reconociste su logro en el chat global. Su compromiso es total.",
+                type: "m"
+            }
+        ];
+
+        function playTurn(choice) {
+            const fb = document.getElementById('game-feedback');
+            const current = levels[step];
+
+            if (choice === 'higiene') {
+                health = Math.min(health + 25, 100);
+                fb.innerText = current.h_res;
+            } else {
+                if (health < 60) {
+                    xp = Math.max(xp - 10, 0);
+                    fb.innerText = "CRITICAL ERROR: " + current.m_res;
+                    fb.style.color = "#ff5555";
+                } else {
+                    xp = Math.min(xp + 35, 100);
+                    fb.innerText = "LEVEL UP: " + current.m_res;
+                    fb.style.color = "var(--mc-gold)";
+                }
+            }
+
+            updateUI();
+            step++;
+
+            if (step < levels.length) {
+                setTimeout(() => {
+                    document.getElementById('scenario-box').innerText = "Escenario: " + levels[step].q;
+                    fb.style.color = "var(--mc-gold)";
+                }, 3000);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('game-engine').innerHTML = "<h1 style='font-size:1.5rem'>GAME OVER</h1><p style='color:white; font-size:0.7rem'>Puntuación Final: " + (health + xp) + " puntos de Gestión</p><button onclick='location.reload()' style='padding:10px; margin-top:20px'>REGENERAR MUNDO</button>";
+                }, 3000);
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('health-val').innerText = health + "%";
+            document.getElementById('xp-val').innerText = xp + "%";
+            document.getElementById('xp-fill').style.width = xp + "%";
+        }
+    </script>
+</body>
+</html>
